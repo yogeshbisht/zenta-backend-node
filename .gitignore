@@ -1,0 +1,14 @@
+# Node Modules Folder
+node_modules
+
+# Environment variable configuration
+.env*
+
+# Log Files
+*.log
+
+# Sample Data folder
+dev-data
+
+.DS_Store
+public

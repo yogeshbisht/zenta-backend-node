@@ -1,0 +1,46 @@
+{
+  "name": "zentaflow-api",
+  "version": "1.0.0",
+  "description": "api for zentaflow application",
+  "main": "server.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon server.js"
+  },
+  "keywords": [
+    "api",
+    "cashflow",
+    "finance"
+  ],
+  "author": "Zentapon Pty Ltd",
+  "license": "ISC",
+  "dependencies": {
+    "apicache-plus": "^2.3.1",
+    "axios": "^1.3.4",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "googleapis": "^113.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "moment": "^2.29.4",
+    "mongoose": "^7.0.1",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.1",
+    "validator": "^13.9.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.35.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.4"
+  },
+  "engines": {
+    "node": "18.13.0",
+    "npm": "8.19.3"
+  }
+}
