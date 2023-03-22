@@ -1,5 +1,6 @@
 const crypto = require('crypto');
-const { DEFAULT_SCENARIOS } = require('../constants');
+const { DEFAULT_SCENARIOS, DEFAULT_CATEGORIES } = require('../constants');
+const Category = require('../models/Category');
 const Scenario = require('../models/Scenario');
 
 const User = require('../models/User');
@@ -27,8 +28,23 @@ const register = async (userObject) => {
     );
   }
 
-  await Scenario.insertMany(
-    DEFAULT_SCENARIOS.map((scenario) => ({ ...scenario, user: newUser._id }))
+  const defaultScenarios = await Scenario.insertMany(
+    DEFAULT_SCENARIOS.map((scenario) => ({ ...scenario, user: newUser.id }))
+  );
+
+  if (!defaultScenarios.length) {
+    throw new AppError('Failed to create default scenarios', 500);
+  }
+
+  const mainAccountId = defaultScenarios[0].id;
+
+  await Category.insertMany(
+    DEFAULT_CATEGORIES.map((category, index) => ({
+      name: category,
+      scenario: mainAccountId,
+      user: newUser.id,
+      order: index + 1,
+    }))
   );
 
   return newUser;

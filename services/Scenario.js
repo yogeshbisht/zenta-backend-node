@@ -1,9 +1,10 @@
+const Category = require('../models/Category');
 const Debt = require('../models/Debt');
 const Scenario = require('../models/Scenario');
 const AppError = require('../utils/AppError');
 
-const getScenarios = async (reqUser) => {
-  const scenarios = await Scenario.find({ user: reqUser.id }, '-user -__v');
+const getScenarios = async (userId) => {
+  const scenarios = await Scenario.find({ user: userId });
 
   if (!scenarios) {
     throw new AppError('No scenarios found this user', 404);
@@ -12,6 +13,19 @@ const getScenarios = async (reqUser) => {
   return {
     status: 'success',
     data: scenarios,
+  };
+};
+
+const getScenarioCategories = async (scenarioId) => {
+  if (!scenarioId) {
+    throw new AppError('Please provide the scenario id', 400);
+  }
+
+  const scenarioCategories = await Category.find({ scenario: scenarioId });
+
+  return {
+    status: 'success',
+    data: scenarioCategories,
   };
 };
 
@@ -104,10 +118,6 @@ const deleteScenario = async (scenarioId) => {
 
   // // Delete all Transactions associated with this scenario
   // await Transaction.deleteMany({ scenario: scenarioId });
-
-  return {
-    status: 'success',
-  };
 };
 
 const getAllScenarios = async () => {
@@ -122,6 +132,7 @@ const getAllScenarios = async () => {
 
 module.exports = {
   getScenarios,
+  getScenarioCategories,
   createScenario,
   updateActiveScenarios,
   updateScenario,

@@ -4,7 +4,11 @@
   "description": "api for zentaflow application",
   "main": "server.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon server.js"
+    "dev": "cross-env NODE_ENV=development nodemon server.js",
+    "staging": "cross-env NODE_ENV=staging node server.js",
+    "start": "cross-env NODE_ENV=production node server.js",
+    "script:dev": "cross-env NODE_ENV=development node",
+    "script:prod": "cross-env NODE_ENV=production node"
   },
   "keywords": [
     "api",

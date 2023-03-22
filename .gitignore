@@ -12,3 +12,6 @@ dev-data
 
 .DS_Store
 public
+
+# Scripts
+scripts

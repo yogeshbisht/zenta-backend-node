@@ -134,6 +134,7 @@ const updateUser = async (userId, userData) => {
 };
 
 const deleteUser = async (userId) => {
+  // TODO grace period for user delete
   const userToDelete = await User.findByIdAndDelete(userId);
 
   if (!userToDelete) {

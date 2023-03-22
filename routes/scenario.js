@@ -5,6 +5,8 @@ const { userAuth } = require('../middlewares/auth');
 const router = express.Router();
 
 router.use(userAuth);
+router.get('/all', scenarioController.getAllScenarios);
+router.get('/:id/categories', scenarioController.getScenarioCategories);
 
 router
   .route('/')
@@ -17,7 +19,5 @@ router
   .route('/:id')
   .patch(scenarioController.updateScenario)
   .delete(scenarioController.deleteScenario);
-
-router.get('/all', scenarioController.getAllScenarios);
 
 module.exports = router;

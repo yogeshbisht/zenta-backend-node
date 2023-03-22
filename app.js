@@ -42,5 +42,6 @@ app.use(compression());
 app.use('/api/v1/auth', require('./routes/auth'));
 app.use('/api/v1/users', require('./routes/user'));
 app.use('/api/v1/scenario', require('./routes/scenario'));
+app.use('/api/v1/category', require('./routes/category'));
 
 module.exports = app;

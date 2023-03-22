@@ -4,7 +4,17 @@ const ScenarioService = require('../services/Scenario');
 
 // controller to create a new scenario
 const getScenarios = wrapPromiseResponse(async (req) => {
-  const data = await ScenarioService.getScenarios(req.user);
+  const data = await ScenarioService.getScenarios(req.user.id);
+
+  return {
+    status: 200,
+    data,
+  };
+});
+
+// controller to get categories for specific scenario
+const getScenarioCategories = wrapPromiseResponse(async (req) => {
+  const data = await ScenarioService.getScenarioCategories(req.params.id);
 
   return {
     status: 200,
@@ -74,6 +84,7 @@ const getAllScenarios = wrapPromiseResponse(async () => {
 
 module.exports = {
   getScenarios,
+  getScenarioCategories,
   createScenario,
   updateActiveScenarios,
   updateScenario,

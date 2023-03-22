@@ -13,7 +13,7 @@ const ScenarioSchema = new mongoose.Schema(
     currency: { type: String, default: DEFAULT_CURRENCY_UNIT },
     accountId: { type: String, default: '' },
     accountName: { type: String, default: '' },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', select: false },
   },
   {
     toJSON: { virtuals: true },
