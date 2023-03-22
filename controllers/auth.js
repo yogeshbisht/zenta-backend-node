@@ -2,8 +2,8 @@ const { wrapPromiseResponse } = require('../utils/helpers');
 const AuthService = require('../services/Auth');
 const { createSendToken } = require('../utils/Auth');
 
-const signup = wrapPromiseResponse(async (req, res) => {
-  const newUser = await AuthService.signUp(req.body);
+const register = wrapPromiseResponse(async (req, res) => {
+  const newUser = await AuthService.register(req.body);
 
   return createSendToken(newUser, 201, res);
 });
@@ -49,7 +49,7 @@ const resetPassword = wrapPromiseResponse(async (req) => {
 });
 
 module.exports = {
-  signup,
+  register,
   login,
   logout,
   forgotPassword,

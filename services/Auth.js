@@ -1,14 +1,16 @@
 const crypto = require('crypto');
+const { DEFAULT_SCENARIOS } = require('../constants');
+const Scenario = require('../models/Scenario');
 
 const User = require('../models/User');
 const AppError = require('../utils/AppError');
 
 const EmailService = require('./Email');
 
-const signUp = async (userObject) => {
-  const { email, password, passwordConfirm, lastLogin } = userObject;
+const register = async (userObject) => {
+  const { email, password, passwordConfirm } = userObject;
 
-  if (!email || !password || !passwordConfirm || !lastLogin) {
+  if (!email || !password || !passwordConfirm) {
     throw new AppError('Please provide all credentials', 400);
   }
 
@@ -25,13 +27,17 @@ const signUp = async (userObject) => {
     );
   }
 
+  await Scenario.insertMany(
+    DEFAULT_SCENARIOS.map((scenario) => ({ ...scenario, user: newUser._id }))
+  );
+
   return newUser;
 };
 
 const login = async (loginData) => {
-  const { email, password, lastLogin } = loginData;
+  const { email, password } = loginData;
 
-  if (!email || !password || !lastLogin) {
+  if (!email || !password) {
     throw new AppError('Please provide all credentials to proceed.', 400);
   }
 
@@ -53,7 +59,7 @@ const login = async (loginData) => {
   }
 
   const userId = user._id;
-  await User.findByIdAndUpdate({ _id: userId }, { lastLogin });
+  await User.findByIdAndUpdate({ _id: userId }, { lastLogin: new Date() });
 
   return user;
 };
@@ -131,7 +137,7 @@ const resetPassword = async (inputData, token) => {
 };
 
 module.exports = {
-  signUp,
+  register,
   login,
   forgotPassword,
   resetPassword,

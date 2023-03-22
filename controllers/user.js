@@ -24,7 +24,7 @@ const createUser = wrapPromiseResponse(async (req) => {
 
 // controller to get user by id
 const getUserById = wrapPromiseResponse(async (req) => {
-  const data = await UserService.getUser(req.params.id);
+  const data = await UserService.getUserById(req.params.id);
 
   return {
     status: 200,

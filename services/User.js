@@ -1,7 +1,6 @@
 const User = require('../models/User');
 const AppError = require('../utils/AppError');
 const { filterImmutableProperties, isEmpty } = require('../utils/helpers');
-const { getUserFullName } = require('../utils/models/user');
 
 const updateUserName = async (userData) => {
   const filteredBody = filterImmutableProperties(
@@ -13,11 +12,6 @@ const updateUserName = async (userData) => {
     'passwordResetToken',
     'passwordResetExpires'
   );
-
-  if (userData.firstName || userData.lastName) {
-    const fullName = getUserFullName(userData);
-    filteredBody.fullName = fullName;
-  }
 
   return filteredBody;
 };
@@ -83,9 +77,9 @@ const updateMe = async (reqUser, userData) => {
 };
 
 const createUser = async (userData) => {
-  const { firstName, email, password, passwordConfirm } = userData;
+  const { email, password, passwordConfirm } = userData;
 
-  if (!firstName || !email || !password || !passwordConfirm) {
+  if (!email || !password || !passwordConfirm) {
     throw new AppError('Please provide all credentials', 400);
   }
 

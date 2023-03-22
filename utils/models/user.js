@@ -16,14 +16,6 @@ const getUserFullNameSlug = async (newSlug) => {
   return tempUserSlug;
 };
 
-// function to help in creating user slug
-const getUserFullName = (userData) => {
-  const { firstName, lastName, fullName } = userData;
-
-  return fullName || `${firstName || ''} ${lastName || ''}`;
-};
-
 module.exports = {
   getUserFullNameSlug,
-  getUserFullName,
 };

@@ -3,13 +3,11 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
-const { isEmpty } = require('../utils/helpers');
+const { DEFAULT_CURRENCY_UNIT } = require('../constants');
 
 const UserSchema = new mongoose.Schema(
   {
-    firstName: { type: String, default: '' },
-    lastName: { type: String, default: '' },
-    fullName: String,
+    fullName: { type: String, default: '' },
     email: {
       type: String,
       required: [true, 'Please provide your email'],
@@ -24,14 +22,8 @@ const UserSchema = new mongoose.Schema(
         user: { type: String, default: '' },
       },
     },
-    lastLogin: {
-      type: Date,
-      required: [true, 'Please provide last login date'],
-    },
-    password: {
-      type: String,
-      select: false,
-    },
+    lastLogin: { type: Date, default: () => moment().format() },
+    password: { type: String, select: false },
     passwordConfirm: {
       type: String,
       validate: {
@@ -41,11 +33,9 @@ const UserSchema = new mongoose.Schema(
         message: 'Passwords are not the same',
       },
     },
-    role: {
-      type: String,
-      enum: ['user', 'admin'],
-      default: 'user',
-    },
+    appTitle: { type: String, default: 'Zentaflow' },
+    currency: { type: String, default: DEFAULT_CURRENCY_UNIT },
+    role: { type: String, enum: ['user', 'admin'], default: 'user' },
     joinedDate: { type: Date, default: () => moment().format() },
     passwordChangedAt: Date,
     passwordResetToken: String,
@@ -56,14 +46,6 @@ const UserSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
-
-UserSchema.pre('save', function (next) {
-  if (isEmpty(this.fullName)) {
-    const fullName = `${this.firstName} ${this.lastName}`;
-    this.fullName = fullName;
-  }
-  next();
-});
 
 // Encrypt password whenever a new one is created
 UserSchema.pre('save', async function (next) {
