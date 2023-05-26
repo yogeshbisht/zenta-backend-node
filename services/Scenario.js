@@ -1,7 +1,19 @@
+/* eslint-disable no-await-in-loop */
 const Category = require('../models/Category');
 const Debt = require('../models/Debt');
 const Scenario = require('../models/Scenario');
 const AppError = require('../utils/AppError');
+const { refineCategoryOrder } = require('../utils/models/category');
+
+const getAllScenarios = async () => {
+  const scenarios = await Scenario.find({});
+
+  // TODO pagination
+  return {
+    status: 'success',
+    data: scenarios,
+  };
+};
 
 const getScenarios = async (userId) => {
   const scenarios = await Scenario.find({ user: userId });
@@ -120,22 +132,59 @@ const deleteScenario = async (scenarioId) => {
   // await Transaction.deleteMany({ scenario: scenarioId });
 };
 
-const getAllScenarios = async () => {
-  const scenarios = await Scenario.find({});
+const deleteScenarioCategory = async (scenarioId, categoryId) => {
+  const hasSubCategories = await Category.findOne({ parent: categoryId });
 
-  // TODO pagination
-  return {
-    status: 'success',
-    data: scenarios,
-  };
+  if (hasSubCategories) {
+    throw new AppError(
+      "This category has sub-categories and can't be deleted",
+      400
+    );
+  }
+
+  const categoryToDelete = await Category.findOneAndDelete({
+    _id: categoryId,
+    scenario: scenarioId,
+  });
+
+  if (!categoryToDelete) {
+    throw new AppError(
+      'Failed to delete that category. Make sure that it exists',
+      500
+    );
+  }
+
+  const scenarioCategories = await Category.find({
+    scenario: scenarioId,
+  }).sort({ order: 1 });
+  await refineCategoryOrder(scenarioId, scenarioCategories);
+};
+
+// TODO search for some method way to handle this type of queries
+const orderCategories = async (scenarioId, categoryList) => {
+  const scenarioCategories = await Category.find({ scenario: scenarioId });
+
+  if (scenarioCategories.length !== categoryList.length) {
+    throw new AppError('Invalid category list data', 400);
+  }
+
+  for (let i = 0; i < categoryList.length; i += 1) {
+    const category = categoryList[i];
+    const { id, order } = category;
+    await Category.findByIdAndUpdate(id, { $set: { order } });
+  }
+
+  return await Category.find({ scenario: scenarioId });
 };
 
 module.exports = {
+  getAllScenarios,
   getScenarios,
   getScenarioCategories,
   createScenario,
   updateActiveScenarios,
   updateScenario,
   deleteScenario,
-  getAllScenarios,
+  deleteScenarioCategory,
+  orderCategories,
 };

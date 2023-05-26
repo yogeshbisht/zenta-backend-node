@@ -58,19 +58,19 @@ const updateCategory = async (categoryId, categoryData) => {
     }
   }
 
-  const updatedCategory = await Category.findByIdAndUpdate(
+  const categoryToUpdate = await Category.findByIdAndUpdate(
     categoryId,
     categoryData,
     { new: true, runValidators: true }
   );
 
-  if (!updatedCategory) {
+  if (!categoryToUpdate) {
     throw new AppError('Failed to create new category', 500);
   }
 
   return {
     status: 'success',
-    data: updatedCategory,
+    data: categoryToUpdate,
   };
 };
 

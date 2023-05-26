@@ -7,7 +7,6 @@ const CategorySchema = new mongoose.Schema(
       required: [true, 'Please provide a category name'],
       minlength: 3,
     },
-    type: { type: String, default: 'B' },
     scenario: {
       type: mongoose.Schema.Types.ObjectId,
       required: [true, 'Please provide the scenario for this category'],

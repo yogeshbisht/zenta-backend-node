@@ -2,6 +2,16 @@ const { wrapPromiseResponse } = require('../utils/helpers');
 
 const ScenarioService = require('../services/Scenario');
 
+// admin route - get all scenarios
+const getAllScenarios = wrapPromiseResponse(async () => {
+  const data = await ScenarioService.getAllScenarios();
+
+  return {
+    status: 200,
+    data,
+  };
+});
+
 // controller to create a new scenario
 const getScenarios = wrapPromiseResponse(async (req) => {
   const data = await ScenarioService.getScenarios(req.user.id);
@@ -72,9 +82,22 @@ const deleteScenario = wrapPromiseResponse(async (req) => {
   };
 });
 
-// admin route - get all scenarios
-const getAllScenarios = wrapPromiseResponse(async () => {
-  const data = await ScenarioService.getAllScenarios();
+// controller to delete a category for specific scenario
+const deleteScenarioCategory = wrapPromiseResponse(async (req) => {
+  await ScenarioService.deleteScenarioCategory(
+    req.params.id,
+    req.params.categoryId
+  );
+
+  return {
+    status: 204,
+    data: null,
+  };
+});
+
+// controller to update order of scenario categories
+const orderCategories = wrapPromiseResponse(async (req) => {
+  const data = await ScenarioService.orderCategories(req.params.id, req.body);
 
   return {
     status: 200,
@@ -90,4 +113,6 @@ module.exports = {
   updateScenario,
   deleteScenario,
   getAllScenarios,
+  deleteScenarioCategory,
+  orderCategories,
 };

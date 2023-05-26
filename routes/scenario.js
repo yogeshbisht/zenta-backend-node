@@ -8,6 +8,13 @@ router.use(userAuth);
 router.get('/all', scenarioController.getAllScenarios);
 router.get('/:id/categories', scenarioController.getScenarioCategories);
 
+router.post('/:id/categories/order', scenarioController.orderCategories);
+
+router.delete(
+  '/:id/category/:categoryId',
+  scenarioController.deleteScenarioCategory
+);
+
 router
   .route('/')
   .get(scenarioController.getScenarios)
